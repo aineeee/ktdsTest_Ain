@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.ktdsuniversity.edu.goodgag.member.dao.MemberDAO;
-import com.ktdsuniversity.edu.goodgag.member.dao.MemberDAOImpl;
+import com.ktdsuniversity.edu.goodgag.member.dao.MemberDaoImpl;
 import com.ktdsuniversity.edu.goodgag.member.vo.MemberVO;
 
 public class GoodGagDAO {
@@ -317,7 +317,7 @@ public class GoodGagDAO {
 	//	printOneMembers("b@gamil.com" , "passwordismerong");
 	//	printOneMembers("c@gamil.com" , "passwordismerong");
 	
-	MemberDAO memberDAO = new MemberDImpl();
+	MemberDAO memberDAO = new MemberDaoImpl();
 	List<MemberVO> allMemberList = memberDAO.getAllMembers();
 	MemberVO member = memberDAO.getOneMember("a@gamil.com", "passwordismerong");
 	

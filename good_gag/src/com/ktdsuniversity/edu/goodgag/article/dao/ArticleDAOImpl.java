@@ -7,7 +7,6 @@ import com.ktdsuniversity.edu.goodgag.article.vo.ArticleVO;
 import com.ktdsuniversity.edu.goodgag.member.vo.MemberVO;
 import com.ktdsuniversity.edu.goodgag.reply.vo.ReplyVO;
 import com.ktdsuniversity.edu.goodgag.utils.db.AbstractDaoPoolSupport;
-import com.ktdsuniversity.edu.goodgag.utils.db.AbstractDaoSupport;
 
 public class ArticleDAOImpl extends AbstractDaoPoolSupport<ArticleVO> implements ArticleDAO {
 
@@ -140,4 +139,59 @@ public class ArticleDAOImpl extends AbstractDaoPoolSupport<ArticleVO> implements
 
 		return null;
 	}
+
+	@Override
+	public int deleteArticle(String articleNo) {
+
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE FROM           ");
+		query.append(" BBS.ARTICLE           ");
+		query.append(" WHERE                 ");
+		query.append(" ARTICLE_NO = ?        ");
+
+		return delete(query.toString(), (pm) -> {
+			pm.setString(1, articleNo);
+		});
+	}
+
+	@Override
+	public int likeDislikeArticle(String email, String articleNo, String likeDislike) {
+		StringBuffer query = new StringBuffer();
+		query.append("MERGE                                                                         ");
+		query.append(" INTO BBS.ARTICLE_LIKE_DISLIKE T1                                             ");
+		query.append("USING DUAL                                                                    ");
+		query.append("   ON (T1.EMAIL = ? AND T1.ARTICLE_NO = ?)                                    ");
+		query.append(" WHEN MATCHED THEN                                                            ");
+		query.append("      UPDATE                                                                  ");
+		query.append("         SET T1.TYPE = ?                                                      ");
+		query.append(" WHEN NOT MATCHED THEN                                                        ");
+		query.append("     INSERT (EMAIL, ARTICLE_NO, TYPE)                                         ");
+		query.append("	 VALUES (?, ?, ?)                                                           ");
+		return update(query.toString(), (pm) -> {
+			pm.setString(1, email);
+			pm.setString(2, articleNo);
+			pm.setString(3, likeDislike);
+			pm.setString(4, email);
+			pm.setString(5, articleNo);
+			pm.setString(6, likeDislike);
+		});
+	}
+
+	@Override
+	public List<ArticleVO> selectAllLikeDislike(String articleNO) {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT                         ");
+		query.append("     EMAIL, ARTICLE_NO, TYPE   ");
+		query.append("FROM                           ");
+		query.append("     BBS.ARTICLE_LIKE_DISLIKE  ");
+
+		return select(query.toString(), null, (rs) -> {
+			ArticleVO articleVO = new ArticleVO();
+			articleVO.setEmail(rs.getString("EMAIL"));
+			articleVO.setArticleNo(rs.getString("ARTICLE_NO"));
+			articleVO.setType(rs.getString("TYPE"));
+			return articleVO;
+		});
+	}
+
 }
