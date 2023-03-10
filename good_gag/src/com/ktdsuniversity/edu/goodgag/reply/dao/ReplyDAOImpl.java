@@ -1,84 +1,73 @@
 package com.ktdsuniversity.edu.goodgag.reply.dao;
 
-public class ReplyDAOImpl extends AbstractDapSupport<> {
-	
-
-}
-
-
-package com.ktdsuniversity.edu.goodgag.member.dao;
-
 import java.util.List;
 
-import com.ktdsuniversity.edu.goodgag.member.vo.MemberVO;
+import com.ktdsuniversity.edu.goodgag.reply.vo.ReplyVO;
 import com.ktdsuniversity.edu.goodgag.utils.db.AbstractDaoSupport;
 
-public class MemberDaoImpl extends AbstractDaoSupport<MemberVO> implements MemberDAO {
+public class ReplyDAOImpl extends AbstractDaoSupport<ReplyVO> implements ReplyDAO {
 
 	@Override
-	public List<MemberVO> getAllMembers() {
+	public List<ReplyVO> getAllRepiles() {
 		StringBuffer query = new StringBuffer();
-		query.append(" SELECT EMAIL ");
-		query.append("    , NICKNAME");
-		query.append("    , VERIFIED_YN");
-		query.append("    , PASSWORD");
-		query.append("    , TO_CHAR(JOIN_DATE, 'YYYY-MM-DD HH24:MI:SS') JOIN_DATE");
-		query.append("    FROM MEMBER ");
-		query.append("    WHERE EMAIL = ? ");
-		query.append("    AND PASSWORD = ? ");
+
+		query.append("SELECT                    ");
+		query.append("	REPLY_NO,               ");
+		query.append("	ARTICLE_NO,             ");
+		query.append("	EMAIL,                  ");
+		query.append("	REPLY,                  ");
+		query.append("	REGIST_DATE,            ");
+		query.append("	MODIFY_DATE,            ");
+		query.append("	PARENT_REPLY_NO         ");
+		query.append("FROM                      ");
+		query.append("	BBS.REPLIES             ");
 		
-		return select(query.toString(), (pstmt) ->  {
-	//	pstmt.setString(1, email);
-	//	pstmt.setString(2, password);
+		return select(query.toString(), (pstmt) -> {
 		}, (rs) -> {
-			MemberVO memberVO = new MemberVO();
-			memberVO.setEmail(rs.getString("EMAIL"));
-			memberVO.setNickname(rs.getString("NICKNAME"));
-			memberVO.setVerified_yn(rs.getString("VERIFIED_YN"));
-			memberVO.setPassword(rs.getString("PASSWORD"));
-			memberVO.setJoin_date(rs.getString("JOIN_DATE"));
-			
-			return memberVO;
+			ReplyVO _replyVO = new ReplyVO();
+			_replyVO.setReplyNo(rs.getString("REPLY_NO"));
+			_replyVO.setArticleNo(rs.getString("ARTICLE_NO"));
+			_replyVO.setEmail(rs.getString("EMAIL"));
+			_replyVO.setReply(rs.getString("REPLY"));
+			_replyVO.setRegistDate(rs.getString("REGIST_DATE"));
+			_replyVO.setModifyDate(rs.getString("MODIFY_DATE"));
+			_replyVO.setParentReplyNo(rs.getString("PARENT_REPLY_NO"));
+
+			return _replyVO;
 		});
 	}
 
-
-	
 	@Override
-	public MemberVO getOneMember(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
+	public ReplyVO getOneReply(String replyNo) {
+		StringBuffer query = new StringBuffer();
 
-
-	@Override
-	public int createMember(MemberVO memberVO) {
-		StringBuffer query = new StringBuffer();			
-
-		query.append(" INSERT INTO MEMBER ");		
-		query.append(" (EMAIL                  ");
-		query.append(" , NICKNAME               ");
-		query.append(" , VERIFIED_YN            ");
-		query.append(" , PASSWORD               ");
-		query.append(" , JOIN_DATE)               ");
-		query.append(" VALUES               ");
-		query.append(" (?/*EMAIL*/  ");
-		query.append(" , ?/* NICKNAME*/ ");
-		query.append(" , 'N'/* VERIFIED_YN */  ");
-		query.append(" , ? /* PASSWORD */ ");
-		query.append(" , SYSDATE)-- JOIN_DATE    ");
+		query.append("SELECT                    ");
+		query.append("	REPLY_NO,               ");
+		query.append("	ARTICLE_NO,             ");
+		query.append("	EMAIL,                  ");
+		query.append("	REPLY,                  ");
+		query.append("	REGIST_DATE,            ");
+		query.append("	MODIFY_DATE,            ");
+		query.append("	PARENT_REPLY_NO         ");
+		query.append("FROM                      ");
+		query.append("	BBS.REPLIES             ");
+		query.append("WHERE 1=1                 ");
+		query.append("	AND BBS.REPLY_NO = ?    ");
 		
-		return insert(query.toString(), (pm) -> {
-			pm.setString(1, memberVO.getEmail());
-			pm.setString(2, memberVO.getNickname());
-			pm.setString(3, memberVO.getPassword());
-			
+		return selectOne(query.toString(), (pstmt) -> {
+			pstmt.setString(1, replyNo);
+		}, (rs) -> {
+			ReplyVO _replyVO = new ReplyVO();
+			_replyVO.setReplyNo(rs.getString("REPLY_NO"));
+			_replyVO.setArticleNo(rs.getString("ARTICLE_NO"));
+			_replyVO.setEmail(rs.getString("EMAIL"));
+			_replyVO.setReply(rs.getString("REPLY"));
+			_replyVO.setRegistDate(rs.getString("REGIST_DATE"));
+			_replyVO.setModifyDate(rs.getString("MODIFY_DATE"));
+			_replyVO.setParentReplyNo(rs.getString("PARENT_REPLY_NO"));
+
+			return _replyVO;
 		});
 	}
 
-	
-	
-	
-	
 }

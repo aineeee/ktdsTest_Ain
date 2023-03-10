@@ -16,12 +16,8 @@ public class MemberDaoImpl extends AbstractDaoSupport<MemberVO> implements Membe
 		query.append("    , PASSWORD");
 		query.append("    , TO_CHAR(JOIN_DATE, 'YYYY-MM-DD HH24:MI:SS') JOIN_DATE");
 		query.append("    FROM MEMBER ");
-		query.append("    WHERE EMAIL = ? ");
-		query.append("    AND PASSWORD = ? ");
 		
 		return select(query.toString(), (pstmt) ->  {
-	//	pstmt.setString(1, email);
-	//	pstmt.setString(2, password);
 		}, (rs) -> {
 			MemberVO memberVO = new MemberVO();
 			memberVO.setEmail(rs.getString("EMAIL"));
@@ -38,8 +34,29 @@ public class MemberDaoImpl extends AbstractDaoSupport<MemberVO> implements Membe
 	
 	@Override
 	public MemberVO getOneMember(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT EMAIL ");
+		query.append("    , NICKNAME");
+		query.append("    , VERIFIED_YN");
+		query.append("    , PASSWORD");
+		query.append("    , TO_CHAR(JOIN_DATE, 'YYYY-MM-DD HH24:MI:SS') JOIN_DATE");
+		query.append("    FROM MEMBER ");
+		query.append("    WHERE EMAIL = ? ");
+		query.append("    AND PASSWORD = ? ");
+		
+		return selectOne(query.toString(), (pstmt) ->  {
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+		}, (rs) -> {
+			MemberVO memberVO = new MemberVO();
+			memberVO.setEmail(rs.getString("EMAIL"));
+			memberVO.setNickname(rs.getString("NICKNAME"));
+			memberVO.setVerified_yn(rs.getString("VERIFIED_YN"));
+			memberVO.setPassword(rs.getString("PASSWORD"));
+			memberVO.setJoin_date(rs.getString("JOIN_DATE"));
+			
+			return memberVO;
+		});
 	}
     
 
@@ -59,13 +76,12 @@ public class MemberDaoImpl extends AbstractDaoSupport<MemberVO> implements Membe
 		query.append(" , ?/* NICKNAME*/ ");
 		query.append(" , 'N'/* VERIFIED_YN */  ");
 		query.append(" , ? /* PASSWORD */ ");
-		query.append(" , SYSDATE)-- JOIN_DATE    ");
+		query.append(" , SYSDATE /* JOIN_DATE */ )   ");
 		
 		return insert(query.toString(), (pm) -> {
 			pm.setString(1, memberVO.getEmail());
 			pm.setString(2, memberVO.getNickname());
 			pm.setString(3, memberVO.getPassword());
-			
 		});
 	}
 

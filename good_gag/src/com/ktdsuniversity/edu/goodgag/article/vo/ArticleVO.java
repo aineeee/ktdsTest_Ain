@@ -15,6 +15,9 @@ public class ArticleVO {
 	private String source;
 	private String notiYn;
 	
+	// 좋아요 싫어요
+	private String type;
+	
 	/*
 	 * 게시글을 작성한 회원의 정보
 	 */
@@ -78,6 +81,12 @@ public class ArticleVO {
 	}
 	public void setNotiYn(String notiYn) {
 		this.notiYn = notiYn;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

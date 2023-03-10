@@ -18,5 +18,11 @@ public interface ArticleDAO {
 	public int createArticle(ArticleVO articleVO);
 	public List<ArticleVO> getAllArticles();
 	
+	public int deleteArticle(String articleNo);
+	
+	public int likeDislikeArticle(String email, String articleNo, String likeDislike);
+	
+	public List<ArticleVO> selectAllLikeDislike(String articleNO);
+	
 	
 }

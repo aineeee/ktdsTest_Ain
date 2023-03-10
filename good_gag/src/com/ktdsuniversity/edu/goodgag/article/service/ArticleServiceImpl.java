@@ -35,4 +35,21 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleList;
 	}
 
+	@Override
+	public int deleteArticle(String articleNo) {
+		return articleDAO.deleteArticle(articleNo);
+	}
+
+	@Override
+	public int likeDislikeArticle(String email, String articleNo, String likeDislike) {
+		return articleDAO.likeDislikeArticle(email, articleNo, likeDislike);
+	}
+
+	@Override
+	public List<ArticleVO> selectAllLikeDislike(String articleNo) {
+		return articleDAO.selectAllLikeDislike(articleNo);
+	}
+
+	
+
 }
